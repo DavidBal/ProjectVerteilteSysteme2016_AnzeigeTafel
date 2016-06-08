@@ -1,0 +1,16 @@
+!SESSION 2016-06-08 15:01:23.768 -----------------------------------------------
+eclipse.buildId=4.5.2.M20160212-1500
+java.version=1.8.0_92
+java.vendor=Oracle Corporation
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=de_DE
+Framework arguments:  -product org.eclipse.epp.package.java.product -keyring /Users/davidbaldauf/.eclipse_keyring -showlocation
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -product org.eclipse.epp.package.java.product -keyring /Users/davidbaldauf/.eclipse_keyring -showlocation
+
+!ENTRY org.eclipse.core.net 1 0 2016-06-08 15:01:48.879
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences
+
+!ENTRY org.eclipse.ui 4 4 2016-06-08 15:01:50.010
+!MESSAGE Referenced part does not exist yet: org.eclipse.ui.views.TaskList.
+
+!ENTRY de.fu_berlin.inf.dpp 2 0 2016-06-08 15:02:06.183
+!MESSAGE received no response from STUN server stunserver.org/69.172.201.153:3478 at local address /192.168.1.6:0 (StunServiceImpl.java:420)

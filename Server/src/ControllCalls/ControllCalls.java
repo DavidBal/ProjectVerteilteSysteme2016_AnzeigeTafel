@@ -22,6 +22,8 @@ public enum ControllCalls {
 				return cc;
 			}
 		}
+		
+		//Hallo dies ist ein Test
 
 		// TODO Exception
 
@@ -29,7 +31,7 @@ public enum ControllCalls {
 	}
 	
 	/**
-	 * Gibt den ControllCall String zurück
+	 * Gibt den ControllCall String zurï¿½ck
 	 * @return String+
 	 */
 	@Override
