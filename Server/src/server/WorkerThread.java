@@ -55,6 +55,9 @@ public class WorkerThread implements Runnable {
 
 	private void controll(String controllCall) {
 
+		/**
+		 * 
+		 */
 		/**TODO 
 		 * ------ *
 		 * CC -> One Line 
@@ -70,7 +73,7 @@ public class WorkerThread implements Runnable {
 		case NEW:
 			try {
 				String msg = this.in.readLine();
-				System.out.println(msg);
+				System.out.println(msg);  
 				this.in.readLine();
 				//TODO END ??
 			} catch (IOException e) {
