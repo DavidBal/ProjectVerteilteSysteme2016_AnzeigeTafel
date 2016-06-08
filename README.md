@@ -3,6 +3,7 @@
 Semster Projekt 
 
 
-java -jar Client.jar
-java -jar Server.jar
+java -jar Client.jar;
+
+java -jar Server.jar;
 
