@@ -22,6 +22,7 @@ public class ClientMain {
 		try {
 			ServerConector test = new ServerConector("localhost", SERVER_PORT);
 			
+			//TODO Thread der das Auto-Uppdate der Daten übernimmt!
 			
 			test.ping();
 			//test.isReachable();
@@ -31,6 +32,7 @@ public class ClientMain {
 			test.auth("test", "Nein");	// PW falsch
 			test.auth("nein", "nein");	// Alles falsch
 			
+			//Ruft das Test Menue auf !!Konsole!!
 			Konsole c = new Konsole(test);
 			c.hauptMenue();
 			

@@ -22,17 +22,13 @@ public enum ControllCalls {
 				return cc;
 			}
 		}
-		
-		//Hallo dies ist ein Test
-
 		// TODO Exception
-
 		return Fail;
 	}
 	
 	/**
-	 * Gibt den ControllCall String zur�ck
-	 * @return String+
+	 * Gibt den ControllCall als String zurueck
+	 * @return String
 	 */
 	@Override
 	public String toString() {
