@@ -1,8 +1,10 @@
 package clientUISimpel;
 
+import java.net.UnknownHostException;
 import java.util.Scanner;
 
 import client.ServerConector;
+import config.Manager;
 
 /**
  * Implementiert auf Basis der Konsole einfache Testmöglichkeiten des Clients!
@@ -12,9 +14,11 @@ import client.ServerConector;
  */
 public class Konsole {
 	ServerConector server;
+	Manager manager;
 
-	public Konsole(ServerConector server) {
+	public Konsole(ServerConector server, Manager manager) {
 		this.server = server;
+		this.manager = manager;
 	}
 
 	/**
@@ -42,6 +46,8 @@ public class Konsole {
 		System.out.println(i++ + " - Ping Server");
 		System.out.println(i++ + " - Send Msg");
 		System.out.println(i++ + " - Login ");
+		System.out.println(i++ + " - Show All Server ");
+		System.out.println(i++ + " - Add a Server");
 
 		// Folgen:
 		System.out.println("--------------------------------------------------");
@@ -89,6 +95,28 @@ public class Konsole {
 			System.out.println("Passwort: ");
 			String pw = leser.nextLine();
 			this.server.auth(userName, pw);
+			break;
+		case 4:
+			System.out.println("-----------Server List-----------");
+			for (ServerConector sc : manager.knownServer) {
+				System.out.println(sc.toString());
+			}
+			System.out.println("---------------END---------------");
+			break;
+		case 5:
+			System.out.println("Name:");
+			String name = leser.nextLine();
+			System.out.println("ServerIP:");
+			String serverIP = leser.nextLine();
+			System.out.println("ServerPort:");
+			String serverPort = leser.nextLine();
+
+			try {
+				manager.addAServer(new ServerConector(serverIP, Integer.valueOf(serverPort), name));
+			} catch (NumberFormatException | UnknownHostException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			break;
 		default:
 			System.out.println("Pls try again!!");
