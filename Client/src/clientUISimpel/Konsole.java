@@ -7,7 +7,7 @@ import client.ServerConector;
 import config.Manager;
 
 /**
- * Implementiert auf Basis der Konsole einfache Testmöglichkeiten des Clients!
+ * Implementiert auf Basis der Konsole einfache TestmÃ¶glichkeiten des Clients!
  * 
  * @author David
  *
@@ -35,7 +35,7 @@ public class Konsole {
 	}
 
 	/**
-	 * Gibt die verfügbaren Funktionen aus
+	 * Gibt die verfÃ¼gbaren Funktionen aus
 	 */
 	private void showMenue() {
 		int i = 1;
@@ -51,12 +51,12 @@ public class Konsole {
 
 		// Folgen:
 		System.out.println("--------------------------------------------------");
-		System.out.println("? - Delete Msg"); // TODO
-		System.out.println("? - Force Uppdate");// TODO
-		System.out.println("? - Edit Msg");// TODO
-		System.out.println("? - Add User");// TODO
-		System.out.println("? - Delete User");// TODO
-		System.out.println("? - Change User Permission");// TODO
+		System.out.println("? - Delete Msg"); // TODO nur eigene (Abt.Leiter alle seiner Abt.)
+		System.out.println("? - Force Uppdate");// TODO Resetet den Auto Update Thread
+		System.out.println("? - Edit Msg");// TODO nur eigene (Abt.Leiter alle seiner Abt.)
+		System.out.println("? - Add User");// TODO Abt. Leiter ; Admin
+		System.out.println("? - Delete User");// TODO Abt. Leiter ; Admin
+		System.out.println("? - Change User Permission");// TODO Admin
 		System.out.println("---------------------------------------------------");
 
 		// --
