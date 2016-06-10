@@ -8,10 +8,12 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-
 public class ServerConector {
+
+	private String name = "";
 	private int serverPort;
 	private InetAddress serverIP;
+
 	private Socket socket;
 
 	private BufferedReader in;
@@ -32,6 +34,22 @@ public class ServerConector {
 		this.serverPort = serverPort;
 		this.connected = false;
 		this.reachable = false;
+
+	}
+
+	/**
+	 * 
+	 * @param serverIP
+	 * @param serverPort
+	 * @param name
+	 * @throws UnknownHostException
+	 */
+	public ServerConector(String serverIP, int serverPort, String name) throws UnknownHostException {
+		this.serverIP = InetAddress.getByName(serverIP);
+		this.serverPort = serverPort;
+		this.connected = false;
+		this.reachable = false;
+		this.name = name;
 
 	}
 
@@ -119,43 +137,67 @@ public class ServerConector {
 		if (tmp.equals("Pong")) {
 			return true;
 		}
-		
+
 		this.disconnect();
 		return false;
 	}
-	
-	public void sendNewMessage(String msg){
+
+	public void sendNewMessage(String msg) {
 		this.connect();
-		
+
 		this.out.println(ControllCalls.ControllCalls.NEW.toString());
-		// 
+		//
 		this.out.println(msg);
 		//
 		this.out.println(ControllCalls.ControllCalls.END);
-		
+
 		this.disconnect();
 	}
-	
-	//TODO 
+
+	// TODO
 	/**
 	 * 
 	 */
-	public void auth(String userName, String pw){
+	public void auth(String userName, String pw) {
 		this.connect();
-		
+
 		this.out.println(ControllCalls.ControllCalls.LOGIN);
 		this.out.println(userName);
 		this.out.println(pw);
 		this.out.println(ControllCalls.ControllCalls.END);
-		
+
 		try {
 			System.out.println(this.in.readLine());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		this.disconnect();
+	}
+
+	@Override
+	public String toString() {
+		String tmp = this.name + ":" + this.serverIP.getHostName() + ":" + this.serverPort;
+		return tmp;
+	}
+	
+	@Override
+	public boolean equals(Object o){
+		if(o instanceof ServerConector) {
+			ServerConector other = (ServerConector) o;
+			
+			if(this.name.equals(other.name)){
+				if(this.serverIP.equals(other.serverIP)){
+					if(this.serverPort == other.serverPort){
+						return true;
+					}
+				}
+			}
+		}
+		
+		return false;
+		
 	}
 
 }

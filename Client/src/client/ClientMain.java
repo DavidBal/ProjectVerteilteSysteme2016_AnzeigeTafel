@@ -1,13 +1,12 @@
 /**
- * 
- * 
- * 
+ *  
  * 
  */
 
 package client;
 
 import clientUISimpel.Konsole;
+import config.Manager;
 
 public class ClientMain {
 
@@ -20,6 +19,9 @@ public class ClientMain {
 	 */
 	public static void main(String[] args) {
 		try {
+			
+			Manager manager = new Manager();
+			
 			ServerConector test = new ServerConector("localhost", SERVER_PORT);
 
 			// TODO Thread der das Auto-Uppdate der Daten übernimmt!
@@ -33,7 +35,7 @@ public class ClientMain {
 			test.auth("nein", "nein"); // Alles falsch
 
 			// Ruft das Test Menue auf !!Konsole!!
-			Konsole c = new Konsole(test);
+			Konsole c = new Konsole(test, manager);
 			c.hauptMenue();
 
 		} catch (Exception e) {
