@@ -24,18 +24,19 @@ public class ClientMain {
 			
 			ServerConector test = new ServerConector("localhost", SERVER_PORT);
 
+			manager.server = test;
 			// TODO Thread der das Auto-Uppdate der Daten übernimmt!
 
-			test.ping();
+			manager.server.ping();
 			// test.isReachable();
-			test.sendNewMessage("Hallo Welt!!");
-			test.auth("test", "test"); // Alles richtig
-			test.auth("Nein", "test"); // User falsch
-			test.auth("test", "Nein"); // PW falsch
-			test.auth("nein", "nein"); // Alles falsch
+			manager.server.sendNewMessage("Hallo Welt!!");
+			manager.server.auth("test", "test"); // Alles richtig
+			manager.server.auth("Nein", "test"); // User falsch
+			manager.server.auth("test", "Nein"); // PW falsch
+			manager.server.auth("nein", "nein"); // Alles falsch
 
 			// Ruft das Test Menue auf !!Konsole!!
-			Konsole c = new Konsole(test, manager);
+			Konsole c = new Konsole(manager);
 			c.hauptMenue();
 
 		} catch (Exception e) {

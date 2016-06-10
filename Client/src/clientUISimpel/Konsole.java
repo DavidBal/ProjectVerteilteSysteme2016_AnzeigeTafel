@@ -13,11 +13,9 @@ import config.Manager;
  *
  */
 public class Konsole {
-	ServerConector server;
 	Manager manager;
 
-	public Konsole(ServerConector server, Manager manager) {
-		this.server = server;
+	public Konsole(Manager manager) {
 		this.manager = manager;
 	}
 
@@ -48,12 +46,16 @@ public class Konsole {
 		System.out.println(i++ + " - Login ");
 		System.out.println(i++ + " - Show All Server ");
 		System.out.println(i++ + " - Add a Server");
+		System.out.println(i++ + " - Change Main-Server ");
 
 		// Folgen:
 		System.out.println("--------------------------------------------------");
-		System.out.println("? - Delete Msg"); // TODO nur eigene (Abt.Leiter alle seiner Abt.)
-		System.out.println("? - Force Uppdate");// TODO Resetet den Auto Update Thread
-		System.out.println("? - Edit Msg");// TODO nur eigene (Abt.Leiter alle seiner Abt.)
+		System.out.println("? - Delete Msg"); // TODO nur eigene (Abt.Leiter
+												// alle seiner Abt.)
+		System.out.println("? - Force Uppdate");// TODO Resetet den Auto Update
+												// Thread
+		System.out.println("? - Edit Msg");// TODO nur eigene (Abt.Leiter alle
+											// seiner Abt.)
 		System.out.println("? - Add User");// TODO Abt. Leiter ; Admin
 		System.out.println("? - Delete User");// TODO Abt. Leiter ; Admin
 		System.out.println("? - Change User Permission");// TODO Admin
@@ -81,25 +83,26 @@ public class Konsole {
 			System.out.println("-Exit-");
 			break;
 		case 1:
-			this.server.ping();
+			this.manager.server.ping();
 			break;
 		case 2:
 			System.out.println("Msg(Press-Enter to Send): ");
 			String msg = "";
 			msg = leser.nextLine();
-			this.server.sendNewMessage(msg);
+			this.manager.server.sendNewMessage(msg);
 			break;
 		case 3:
 			System.out.println("Benutzer: ");
 			String userName = leser.nextLine();
 			System.out.println("Passwort: ");
 			String pw = leser.nextLine();
-			this.server.auth(userName, pw);
+			this.manager.server.auth(userName, pw);
 			break;
 		case 4:
 			System.out.println("-----------Server List-----------");
+			// int i = 0;
 			for (ServerConector sc : manager.knownServer) {
-				System.out.println(sc.toString());
+				System.out.println(manager.knownServer.indexOf(sc) + " - " + sc.toString());
 			}
 			System.out.println("---------------END---------------");
 			break;
@@ -117,6 +120,19 @@ public class Konsole {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			break;
+		case 6:
+			System.out.println("Change Main Server:");
+			String position = leser.nextLine();
+
+			int in = Integer.valueOf(position);
+
+			if (in < manager.knownServer.size() && -1 < in ) {
+				manager.changeMainServer(manager.knownServer.get(in));
+			} else {
+				System.out.println("Out of Bound!!");
+			}
+
 			break;
 		default:
 			System.out.println("Pls try again!!");

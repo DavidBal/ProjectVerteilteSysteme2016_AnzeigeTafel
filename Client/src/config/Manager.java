@@ -103,4 +103,8 @@ public class Manager {
 			e.printStackTrace();
 		}
 	}
+	
+	public void changeMainServer(ServerConector server){
+		this.server = server;
+	}
 }
