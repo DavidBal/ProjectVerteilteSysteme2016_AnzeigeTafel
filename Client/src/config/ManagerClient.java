@@ -60,6 +60,7 @@ public class ManagerClient {
 
 					ServerConector newServer = new ServerConector(serverIP, serverPort, name);
 
+					//Überprüfung ob der Server schon vorhanden ist um Dopplung zu verhindern.
 					if (!knownServer.contains(newServer)) {
 						knownServer.add(newServer);
 						System.out.println(knownServer.get(knownServer.size() - 1).toString());
@@ -71,6 +72,7 @@ public class ManagerClient {
 
 			file.close();
 		} catch (FileNotFoundException e) {
+			//Neue File wird angelegt
 			this.createServerListFile();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -94,14 +96,17 @@ public class ManagerClient {
 
 	/**
 	 * Addet einen Neuen Server zur ServerList.txt und Addet ihn zu den knownServer
+	 * Falls der Server schon exestiert wird er nicht geaddet
 	 * @param newServer
 	 */
 	public void addAServer(ServerConector newServer) {
 		
+		//Überprüfen ob der Server schon vorhanden ist um Dopplung zu vermeiden.
 		if(this.knownServer.contains(newServer))
 			return;
 		
 		this.knownServer.add(newServer);
+		
 		try {
 			FileWriter writer = new FileWriter(new File(ManagerClient.filePath),true);
 			writer.write(newServer.toString() + "\n");
@@ -114,7 +119,7 @@ public class ManagerClient {
 	}
 	
 	/**
-	 * Verändert der Server wo die Daten hingesandt werden.
+	 * Veraendert der Server wo die Daten hingesandt werden.
 	 * @param server
 	 */
 	public void changeMainServer(ServerConector server){
