@@ -5,5 +5,5 @@ Semster Projekt
 
 java -jar Client.jar
 
-java -jar Server.jar [Port]
+java -jar Server.jar [Port] or ?
 
