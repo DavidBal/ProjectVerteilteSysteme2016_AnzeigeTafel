@@ -6,7 +6,7 @@
 package client;
 
 import clientUISimpel.Konsole;
-import config.Manager;
+import config.ManagerClient;
 
 public class ClientMain {
 
@@ -20,7 +20,7 @@ public class ClientMain {
 	public static void main(String[] args) {
 		try {
 			
-			Manager manager = new Manager();
+			ManagerClient manager = new ManagerClient();
 			
 			ServerConector test = new ServerConector("localhost", SERVER_PORT);
 

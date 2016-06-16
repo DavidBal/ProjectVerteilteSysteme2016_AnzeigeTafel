@@ -4,7 +4,7 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 import client.ServerConector;
-import config.Manager;
+import config.ManagerClient;
 
 /**
  * Implementiert auf Basis der Konsole einfache Testmoeglichkeiten des Clients!
@@ -13,9 +13,9 @@ import config.Manager;
  *
  */
 public class Konsole {
-	Manager manager;
+	ManagerClient manager;
 
-	public Konsole(Manager manager) {
+	public Konsole(ManagerClient manager) {
 		this.manager = manager;
 	}
 

@@ -10,23 +10,33 @@ import java.util.ArrayList;
 
 import client.ServerConector;
 
-public class Manager {
+public class ManagerClient {
 
 	/**
 	 * Datei Pfad
 	 */
-	private final String filePath = "ServerList.txt";
+	private final static String filePath = "ServerList.txt";
 
+	/**
+	 * Alle bekannten Server
+	 */
 	public ArrayList<ServerConector> knownServer = new ArrayList<ServerConector>();
+	
+	/**
+	 * Server der momentan angesprochen wird
+	 */
 	public ServerConector server;
 
-	public Manager() {
+	/**
+	 * Legt einen neue Manager für den Client an
+	 */
+	public ManagerClient() {
 		this.readInServer();
 	}
 
 	/**
 	 * Liest die Datei ein ServerList.txt ein und Added Server die noch nicht da sind
-	 * falls datei nicht exestiert wird createServerListFile() auferufen
+	 * falls datei nicht exestiert wird createServerListFile() aufgerufen
 	 */
 	private void readInServer() {
 		try {
@@ -62,7 +72,6 @@ public class Manager {
 			file.close();
 		} catch (FileNotFoundException e) {
 			this.createServerListFile();
-			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -73,7 +82,7 @@ public class Manager {
 	 * Legt eine neue ServerList.txt an
 	 */
 	private void createServerListFile() {
-		File file = new File(this.filePath);
+		File file = new File(ManagerClient.filePath);
 
 		try {
 			file.createNewFile();
@@ -94,7 +103,7 @@ public class Manager {
 		
 		this.knownServer.add(newServer);
 		try {
-			FileWriter writer = new FileWriter(new File(this.filePath),true);
+			FileWriter writer = new FileWriter(new File(ManagerClient.filePath),true);
 			writer.write(newServer.toString() + "\n");
 			
 			writer.close();
@@ -104,6 +113,10 @@ public class Manager {
 		}
 	}
 	
+	/**
+	 * Verändert der Server wo die Daten hingesandt werden.
+	 * @param server
+	 */
 	public void changeMainServer(ServerConector server){
 		this.server = server;
 	}

@@ -1,73 +1,29 @@
 package server;
 
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
+public class ServerMain {
 
-public class ServerMain implements Runnable {
+	public static int SERVER_PORT = 4690;
 
 	/**
-	 * Server Port
+	 * Server.jar [Port] or ? for Help
+	 * @param args
 	 */
-	int SERVER_PORT;
-	
-	/**
-	 * Zählt die Aufrufe des Workers
-	 */
-	int zaehler;
-	
-	/**
-	 * Aktive Verbindungen 
-	 */
-	int activ;
-	
-	/**
-	 * Main Server Socket
-	 */
-	ServerSocket socket;
+	public static void main(String[] args) {
 
-	/**
-	 * Constructor 
-	 * @param SERVER_PORT
-	 */
-	public ServerMain(int SERVER_PORT) {
-		this.SERVER_PORT = SERVER_PORT;
-		this.zaehler = 0;
-	
-	}
-
-	/**
-	 * Run Funktion 
-	 * nimmt eingehende Verbindungsanfragen an und startet einen Worker
-	 */
-	@Override
-	public void run() {
-
-		try {
-			socket = new ServerSocket(this.SERVER_PORT);
-
-			while (true) {
-				System.out.println("Waiting for Connection!!  -  " + zaehler);
-				Socket client = socket.accept();
-				zaehler++;
-
-				System.out.println("Connection get Create Thread!");
-				Thread t = new Thread(new WorkerThread(client, zaehler));
-				t.start();
-			}
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			try {
-				socket.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		
+		if (args.length == 1) {
+			if (args[0].equals("?")) {
+				System.out.println("Change port by: Server.jar [Port]");
+				return;
 			}
 		}
+		
+		if (args.length == 1) {
+			SERVER_PORT = Integer.valueOf(args[0]);
+		}
 
+
+		Thread serverMain = new Thread(new Server(SERVER_PORT));
+		serverMain.start();
 	}
-
 }
