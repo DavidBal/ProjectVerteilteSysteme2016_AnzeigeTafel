@@ -1,4 +1,4 @@
-package clientUISimpel;
+package clientTUISimpel;
 
 import java.net.UnknownHostException;
 import java.util.Scanner;
@@ -47,13 +47,13 @@ public class Konsole {
 		System.out.println(i++ + " - Show All Server ");
 		System.out.println(i++ + " - Add a Server");
 		System.out.println(i++ + " - Change Main-Server ");
+		System.out.println(i++ + " - Force Uppdate");// TODO Resetet den Auto Update
+		System.out.println(i++ + " - Show Msgs");
 
 		// Folgen:
 		System.out.println("--------------------------------------------------");
 		System.out.println("? - Delete Msg"); // TODO nur eigene (Abt.Leiter
 												// alle seiner Abt.)
-		System.out.println("? - Force Uppdate");// TODO Resetet den Auto Update
-												// Thread
 		System.out.println("? - Edit Msg");// TODO nur eigene (Abt.Leiter alle
 											// seiner Abt.)
 		System.out.println("? - Add User");// TODO Abt. Leiter ; Admin
@@ -134,6 +134,16 @@ public class Konsole {
 			}
 
 			break;
+		case 7:
+			System.out.println("Update Forced: ");
+			manager.forceUpdate();	
+			break;
+		case 8:
+			System.out.println("Messages: ");
+			for(String s : manager.msg){
+				System.out.println(s);
+			}
+			break;		
 		default:
 			System.out.println("Pls try again!!");
 			break;

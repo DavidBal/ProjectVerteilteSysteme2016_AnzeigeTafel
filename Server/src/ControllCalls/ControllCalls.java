@@ -2,7 +2,7 @@ package ControllCalls;
 
 public enum ControllCalls {
 
-	END("End"), Ping("Ping"), Fail("Fail"), LOGIN("Login"), NEW("New");
+	END("End"), Ping("Ping"), Fail("Fail"), LOGIN("Login"), NEW("New"), UPDATE("Update");
 
 	private ControllCalls(String call) {
 		this.call = call;
@@ -25,9 +25,10 @@ public enum ControllCalls {
 		// TODO Exception
 		return Fail;
 	}
-	
+
 	/**
 	 * Gibt den ControllCall als String zurueck
+	 * 
 	 * @return String
 	 */
 	@Override

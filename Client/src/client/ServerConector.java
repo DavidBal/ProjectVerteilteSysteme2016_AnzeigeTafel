@@ -8,6 +8,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import config.ManagerClient;
+
 public class ServerConector {
 
 	private String name = "";
@@ -19,7 +21,6 @@ public class ServerConector {
 	private BufferedReader in;
 	private PrintWriter out;
 
-
 	/**
 	 * 
 	 * @param serverIP
@@ -30,7 +31,6 @@ public class ServerConector {
 
 		this.serverIP = InetAddress.getByName(serverIP);
 		this.serverPort = serverPort;
-
 
 	}
 
@@ -79,7 +79,6 @@ public class ServerConector {
 		}
 	}
 
-
 	/**
 	 * Send a "Ping" to the Server and if he work correct the Server will return
 	 * a "Pong"!
@@ -101,7 +100,7 @@ public class ServerConector {
 		System.out.println("Ping  :  " + tmp);
 
 		this.disconnect();
-		
+
 		if (tmp.equals("Pong")) {
 			return true;
 		}
@@ -111,12 +110,35 @@ public class ServerConector {
 	public void sendNewMessage(String msg) {
 		this.connect();
 
-		this.out.println(ControllCalls.ControllCalls.NEW.toString());
+		this.out.println(ControllCalls.ControllCalls.NEW);
 		//
 		this.out.println(msg);
 		//
 		this.out.println(ControllCalls.ControllCalls.END);
 
+		this.disconnect();
+	}
+
+	public void update(ManagerClient manager) {
+		this.connect();
+
+		manager.msg.clear(); //TODO Besser
+		
+		this.out.println(ControllCalls.ControllCalls.UPDATE);
+
+		String msg = "";
+		
+		try {
+			msg = in.readLine();
+
+			while (! msg.equals(ControllCalls.ControllCalls.END.toString())) {
+				manager.msg.add(msg);
+				msg = in.readLine();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.disconnect();
 	}
 

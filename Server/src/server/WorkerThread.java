@@ -7,43 +7,50 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import ControllCalls.ControllCalls;
+
 /**
  * Jede Anfrage eines Clients öffnet eine neue Thread ...
+ * 
  * @author David
  *
  */
-public class WorkerThread implements Runnable {
+public class WorkerThread extends Thread {
 
 	Socket client;
 	BufferedReader in;
 	PrintWriter out;
 	int id;
 
+	ServerManager manager;
+
 	@Override
 	public void run() {
 
 		try {
-			
+
 			System.out.println("Worker- " + this.id + ": Iâ€˜m UP!!");
 			String controllCall = this.in.readLine(); // Lese Befehl
-			//System.out.println(controllCall);
+			// System.out.println(controllCall);
 
 			this.controll(controllCall);
-			
+
 			client.close();
-			
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		
 		System.out.println("Worker - " + this.id + " END!!");
 	}
 
-	WorkerThread(Socket client, int id) {
+	WorkerThread(Socket client, int id, ServerManager manager) {
 		this.client = client;
 		this.id = id;
+		this.manager = manager;
+
+		this.setName("WorkerThread" + this.id);
+
 		try {
 			this.in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			this.out = new PrintWriter(client.getOutputStream(), true);
@@ -58,13 +65,10 @@ public class WorkerThread implements Runnable {
 		/**
 		 * 
 		 */
-		/**TODO 
-		 * ------ *
-		 * CC -> One Line 
-		 * Every Msg -> one Line
-		 * END -> One Line 
+		/**
+		 * TODO ------ * CC -> One Line Every Msg -> one Line END -> One Line
 		 */
-		
+
 		switch (ControllCalls.stringToControllCall(controllCall)) {
 		case Ping:
 			// System.out.println("Worker: Right Case");
@@ -73,35 +77,44 @@ public class WorkerThread implements Runnable {
 		case NEW:
 			try {
 				String msg = this.in.readLine();
-				System.out.println(msg);  
+				System.out.println(msg);
+				this.manager.messages.add(msg);
 				this.in.readLine();
-				//TODO END ??
+				// TODO END ??
 			} catch (IOException e) {
-				// TODO 
+				// TODO
 				e.printStackTrace();
 			}
-			
+
 			break;
 		case LOGIN:
 			try {
-				//User Name
+				// User Name
 				boolean uN = this.in.readLine().equals("test");
-				//PW
+				// PW
 				boolean pW = this.in.readLine().equals("test");
-				
+
 				//
-				if(uN && pW){
+				if (uN && pW) {
 					this.out.println("Yes");
-				} else{
+				} else {
 					this.out.println("NO");
-				}	
-				
+				}
+
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			break;
-			
+		case UPDATE:
+
+			for (String s : this.manager.messages) {
+				this.out.println(s);
+			}
+
+			this.out.println(ControllCalls.END);
+
+			break;
 
 		default:
 			break;

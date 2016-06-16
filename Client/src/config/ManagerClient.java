@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import client.ServerConector;
+import update.UpdaterThread;
 
 public class ManagerClient {
 
@@ -21,22 +22,27 @@ public class ManagerClient {
 	 * Alle bekannten Server
 	 */
 	public ArrayList<ServerConector> knownServer = new ArrayList<ServerConector>();
-	
+
 	/**
 	 * Server der momentan angesprochen wird
 	 */
 	public ServerConector server;
+
+	Thread update;
+
+	public ArrayList<String> msg;
 
 	/**
 	 * Legt einen neue Manager für den Client an
 	 */
 	public ManagerClient() {
 		this.readInServer();
+		this.msg = new ArrayList<String>();
 	}
 
 	/**
-	 * Liest die Datei ein ServerList.txt ein und Added Server die noch nicht da sind
-	 * falls datei nicht exestiert wird createServerListFile() aufgerufen
+	 * Liest die Datei ein ServerList.txt ein und Added Server die noch nicht da
+	 * sind falls datei nicht exestiert wird createServerListFile() aufgerufen
 	 */
 	private void readInServer() {
 		try {
@@ -60,7 +66,8 @@ public class ManagerClient {
 
 					ServerConector newServer = new ServerConector(serverIP, serverPort, name);
 
-					//Überprüfung ob der Server schon vorhanden ist um Dopplung zu verhindern.
+					// Überprüfung ob der Server schon vorhanden ist um Dopplung
+					// zu verhindern.
 					if (!knownServer.contains(newServer)) {
 						knownServer.add(newServer);
 						System.out.println(knownServer.get(knownServer.size() - 1).toString());
@@ -72,7 +79,7 @@ public class ManagerClient {
 
 			file.close();
 		} catch (FileNotFoundException e) {
-			//Neue File wird angelegt
+			// Neue File wird angelegt
 			this.createServerListFile();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -95,34 +102,55 @@ public class ManagerClient {
 	}
 
 	/**
-	 * Addet einen Neuen Server zur ServerList.txt und Addet ihn zu den knownServer
-	 * Falls der Server schon exestiert wird er nicht geaddet
+	 * Addet einen Neuen Server zur ServerList.txt und Addet ihn zu den
+	 * knownServer Falls der Server schon exestiert wird er nicht geaddet
+	 * 
 	 * @param newServer
 	 */
 	public void addAServer(ServerConector newServer) {
-		
-		//Überprüfen ob der Server schon vorhanden ist um Dopplung zu vermeiden.
-		if(this.knownServer.contains(newServer))
+
+		// Überprüfen ob der Server schon vorhanden ist um Dopplung zu
+		// vermeiden.
+		if (this.knownServer.contains(newServer))
 			return;
-		
+
 		this.knownServer.add(newServer);
-		
+
 		try {
-			FileWriter writer = new FileWriter(new File(ManagerClient.filePath),true);
+			FileWriter writer = new FileWriter(new File(ManagerClient.filePath), true);
 			writer.write(newServer.toString() + "\n");
-			
+
 			writer.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Veraendert der Server wo die Daten hingesandt werden.
+	 * 
 	 * @param server
 	 */
-	public void changeMainServer(ServerConector server){
+	public void changeMainServer(ServerConector server) {
 		this.server = server;
+	}
+
+	public void startUpdater() {
+		this.update = new UpdaterThread(this);
+		this.update.start();
+	}
+
+	public void forceUpdate() {
+		synchronized (this.update) {
+			this.update.notify();
+		}
+	}
+
+	public void exitUpdater() {
+		synchronized (this.update) {
+			((UpdaterThread)this.update).exit = true;
+			this.update.notify();
+		}
 	}
 }
