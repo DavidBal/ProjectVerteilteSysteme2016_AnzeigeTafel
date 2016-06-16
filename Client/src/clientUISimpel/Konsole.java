@@ -7,7 +7,7 @@ import client.ServerConector;
 import config.Manager;
 
 /**
- * Implementiert auf Basis der Konsole einfache Testmöglichkeiten des Clients!
+ * Implementiert auf Basis der Konsole einfache Testmoeglichkeiten des Clients!
  * 
  * @author David
  *
@@ -33,12 +33,12 @@ public class Konsole {
 	}
 
 	/**
-	 * Gibt die verfügbaren Funktionen aus
+	 * Gibt die verfuegbaren Funktionen aus
 	 */
 	private void showMenue() {
 		int i = 1;
 		System.out.println("--------------------------------------------------");
-		System.out.println("                    Hauptmenue                    ");
+		System.out.println("   -    Test   -    Hauptmenue   -    Test   -    ");
 		System.out.println("--------------------------------------------------");
 		// Sind nutzbar:
 		System.out.println(i++ + " - Ping Server");
