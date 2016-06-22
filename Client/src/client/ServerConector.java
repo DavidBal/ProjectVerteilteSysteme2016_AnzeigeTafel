@@ -107,6 +107,10 @@ public class ServerConector {
 		return false;
 	}
 
+	/**
+	 * Sendet eine Nachricht an den Server.
+	 * @param msg
+	 */
 	public void sendNewMessage(String msg) {
 		this.connect();
 
@@ -119,6 +123,10 @@ public class ServerConector {
 		this.disconnect();
 	}
 
+	/**
+	 * Sendet eine Update auffoderung an den Server.
+	 * @param manager
+	 */
 	public void update(ManagerClient manager) {
 		this.connect();
 

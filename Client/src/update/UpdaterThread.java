@@ -13,17 +13,28 @@ public class UpdaterThread extends Thread {
 
 	ManagerClient manager;
 
+	/**
+	 * 
+	 */
+	@Override
 	public void run() {
 		update();
 		this.exit = false;
 	}
 
+	/**
+	 * 
+	 * @param manager
+	 */
 	public UpdaterThread(ManagerClient manager) {
 		this.manager = manager;
 		this.setName("UpdaterThread");
 
 	}
 
+	/**
+	 * 
+	 */
 	private synchronized void update() {
 		while (true) {
 			this.manager.server.update(this.manager);

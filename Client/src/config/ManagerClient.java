@@ -33,7 +33,7 @@ public class ManagerClient {
 	public ArrayList<String> msg;
 
 	/**
-	 * Legt einen neue Manager für den Client an
+	 * Legt einen neue Manager fï¿½r den Client an
 	 */
 	public ManagerClient() {
 		this.readInServer();
@@ -66,7 +66,7 @@ public class ManagerClient {
 
 					ServerConector newServer = new ServerConector(serverIP, serverPort, name);
 
-					// Überprüfung ob der Server schon vorhanden ist um Dopplung
+					// ï¿½berprï¿½fung ob der Server schon vorhanden ist um Dopplung
 					// zu verhindern.
 					if (!knownServer.contains(newServer)) {
 						knownServer.add(newServer);
@@ -109,7 +109,7 @@ public class ManagerClient {
 	 */
 	public void addAServer(ServerConector newServer) {
 
-		// Überprüfen ob der Server schon vorhanden ist um Dopplung zu
+		// Ueberpruefen ob der Server schon vorhanden ist um Dopplung zu
 		// vermeiden.
 		if (this.knownServer.contains(newServer))
 			return;
@@ -135,18 +135,28 @@ public class ManagerClient {
 	public void changeMainServer(ServerConector server) {
 		this.server = server;
 	}
-
+	
+	
+	/**
+	 * Startet den UpdaterThread
+	 */
 	public void startUpdater() {
 		this.update = new UpdaterThread(this);
 		this.update.start();
 	}
 
+	/**
+	 * Singalisiert dem UpdaterThread jetzt ein Update durch zufÃ¼hren
+	 */
 	public void forceUpdate() {
 		synchronized (this.update) {
 			this.update.notify();
 		}
 	}
 
+	/**
+	 * Der UpdaterThread soll beendet werden.
+	 */
 	public void exitUpdater() {
 		synchronized (this.update) {
 			((UpdaterThread)this.update).exit = true;
