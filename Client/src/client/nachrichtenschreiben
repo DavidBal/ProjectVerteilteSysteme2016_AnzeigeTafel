@@ -1,0 +1,41 @@
+import java.io.*;
+import java.util.*;
+
+public class nachrichtenschreiben
+{
+	public static void main(String[] args) throws IOException
+	{
+		Scanner scanNachricht=new Scanner(System.in);
+		
+		String zeile = "";
+		String nachricht="";
+		String user = "Marco";
+		int nachrichtenanzahl = 0;
+		
+		FileReader fr = new FileReader("C:\\Users\\Marco\\Desktop\\nachrichten.txt");
+		BufferedReader br = new BufferedReader(fr);
+		zeile = br.readLine();
+		do
+		{
+			zeile = br.readLine();
+			nachrichtenanzahl++;
+		}
+		while(zeile!=null);
+		br.close();
+			
+		try
+		{
+			System.out.println("Nachricht:");
+			nachricht=scanNachricht.nextLine();
+			FileWriter fw = new FileWriter("C:\\Users\\Marco\\Desktop\\nachrichten.txt",/* append */ true);
+			fw.write(System.getProperty("line.separator") );
+			fw.write(user+"/"+nachrichtenanzahl+"/"+nachricht);
+			fw.close();
+			scanNachricht.close();
+		}
+		catch (IOException e)
+		{
+			System.err.println("Fehler beim erstellen der Nachricht");
+		}
+	}
+}
