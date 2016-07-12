@@ -8,15 +8,21 @@ import javax.swing.JOptionPane;
 import server.Message;
 
 public class Database {
-	Connection conn = null;
+	private Connection conn = null;
 
 	static int id = 1;
-
+	/**
+	 * Klasse Database wird erstellt.
+	 */
 	public Database() {
 		this.conn = this.dbConnector();
 		this.createTables();
 	}
-
+	
+	
+	/**
+	 * Erstellt eine Verbindung zur Datenbank.
+	 */
 	private Connection dbConnector() {
 
 		try {
@@ -24,7 +30,7 @@ public class Database {
 			Connection conn = DriverManager.getConnection("jdbc:sqlite:Datenbank\\messages.sqlite");
 			JOptionPane.showMessageDialog(null, "Verbindung hergestellt");
 			return conn;
-		} catch (Exception e) {
+		} catch (SQLException | ClassNotFoundException e) {
 			// TODO
 			e.printStackTrace();
 			return null;
@@ -32,7 +38,7 @@ public class Database {
 	}
 
 	/**
-	 * Erstellt einen neuen Table
+	 * Erstellt einen neuen Table falls nicht vorhanden.
 	 */
 	private void createTables() {
 		try {
@@ -43,9 +49,9 @@ public class Database {
 
 			stmt.executeUpdate(sql);
 
-			sql = "CREATE TABLE IF NOT EXISTS NACHRICHT, " + "(ID INT PRIMARY KEY NOT NULL,"
+			sql = "CREATE TABLE IF NOT EXISTS NACHRICHT " + "(ID INT PRIMARY KEY NOT NULL,"
 					+ " NACHRICHT TEXT NOT NULL, " + " ABTEILUNG TEXT NOT NULL ," + " USERNAME INT NOT NULL, "
-					+ " LASTCHANGE INT NOT NULL " + ");";
+					+ " LASTCHANGE INT NOT NULL );";
 
 			stmt.executeUpdate(sql);
 			stmt.close();
@@ -53,25 +59,33 @@ public class Database {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
 
+	}
+	/**
+	 * 
+	 * @param username
+	 * Legt einen Benutzer an falls dieser noch nicht vorhanden ist.
+	 * @param pw
+	 * Legt das Passwort des Benutzer fest.
+	 * @param berechtigung
+	 * Legt die Berechtigung des Benutzer fest.
+	 */
 	public void addUser(String username, String pw, int berechtigung) {
 		try {
 			// TODO Funktion Auto-Generate ID
-			// TODO Check Username Used only ones
+			// TODO Check Username Used only ones (WIP)
 
 			Statement stmt = conn.createStatement();
-			
-			String check = "SELECT * FROM LOGIN WHERE USERNAME CONTAINS " + username +";";
-			
-			if(!conn.prepareStatement(check).execute()){
-				 //TODO
+
+			String check = "SELECT * FROM LOGIN WHERE USERNAME CONTAINS " + username + ";";
+
+			if (conn.prepareStatement(check).execute() == false) {
+				// TODO Exception
 			}
-			
-			
+
 			String sql = "INSERT INTO LOGIN (ID,USERNAME,PASSWORD,BERECHTIGUNG)" + "VALUES(" + id + ", '" + username
 					+ "' , '" + pw + "' , " + berechtigung + " );";
-			
+
 			stmt.executeUpdate(sql);
 			stmt.close();
 

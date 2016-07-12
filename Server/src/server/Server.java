@@ -14,7 +14,7 @@ public class Server extends Thread {
 	int SERVER_PORT;
 
 	/**
-	 * Z�hlt die Aufrufe des Workers
+	 * Zaehlt die Aufrufe des Workers
 	 */
 	int zaehler;
 
