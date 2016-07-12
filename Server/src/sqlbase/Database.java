@@ -7,12 +7,17 @@ import javax.swing.JOptionPane;
 
 import server.Message;
 
-public class Driver {
+public class Database {
 	Connection conn = null;
 
 	static int id = 1;
 
-	public static Connection dbConnector() {
+	public Database() {
+		this.conn = this.dbConnector();
+		this.createTables();
+	}
+
+	private Connection dbConnector() {
 
 		try {
 			Class.forName("org.sqlite.JDBC");
@@ -20,22 +25,27 @@ public class Driver {
 			JOptionPane.showMessageDialog(null, "Verbindung hergestellt");
 			return conn;
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, e);
+			// TODO
+			e.printStackTrace();
 			return null;
 		}
 	}
 
-	public void createTables() {
+	/**
+	 * Erstellt einen neuen Table
+	 */
+	private void createTables() {
 		try {
 			Statement stmt = conn.createStatement();
 
-			String sql = "CREATE TABLE LOGIN " + "(ID INT PRIMARY KEY NOT NULL" + " USERNAME TEXT NOT NULL "
-					+ " PASSWORD TEXT NOT NULL " + " BERECHTIGUNG TEXT NOT NULL); ";
+			String sql = "CREATE TABLE IF NOT EXISTS LOGIN " + "(ID INT PRIMARY KEY NOT NULL,"
+					+ " USERNAME TEXT NOT NULL, " + " PASSWORD TEXT NOT NULL, " + " BERECHTIGUNG TEXT NOT NULL); ";
 
 			stmt.executeUpdate(sql);
 
-			sql = "CREATE TABLE NACHRICHT " + "(ID INT PRIMARY KEY NOT NULL" + " NACHRICHT TEXT NOT NULL "
-					+ " ABTEILUNG TEXT NOT NULL " + " USERNAME INT NOT NULL " + " LASTCHANGE INT NOT NULL " + ");";
+			sql = "CREATE TABLE IF NOT EXISTS NACHRICHT, " + "(ID INT PRIMARY KEY NOT NULL,"
+					+ " NACHRICHT TEXT NOT NULL, " + " ABTEILUNG TEXT NOT NULL ," + " USERNAME INT NOT NULL, "
+					+ " LASTCHANGE INT NOT NULL " + ");";
 
 			stmt.executeUpdate(sql);
 			stmt.close();
@@ -51,14 +61,21 @@ public class Driver {
 			// TODO Check Username Used only ones
 
 			Statement stmt = conn.createStatement();
-
+			
+			String check = "SELECT * FROM LOGIN WHERE USERNAME CONTAINS " + username +";";
+			
+			if(!conn.prepareStatement(check).execute()){
+				 //TODO
+			}
+			
+			
 			String sql = "INSERT INTO LOGIN (ID,USERNAME,PASSWORD,BERECHTIGUNG)" + "VALUES(" + id + ", '" + username
 					+ "' , '" + pw + "' , " + berechtigung + " );";
-
+			
 			stmt.executeUpdate(sql);
 			stmt.close();
 
-			Driver.id++;
+			Database.id++;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -93,7 +110,8 @@ public class Driver {
 			rs.close();
 			pst.close();
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, e);
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 		return berechtigung;
@@ -151,6 +169,12 @@ public class Driver {
 		return id;
 	}
 
+	/**
+	 * Fuegt eine Nachricht zur Datenbank hinzu
+	 * 
+	 * @param msg
+	 * @return
+	 */
 	public int addMessage(Message msg) {
 
 		Statement stmt;
@@ -170,6 +194,11 @@ public class Driver {
 		return 0;
 	}
 
+	/**
+	 * Löscht eine bestimmte Nachricht aus der Datenbank
+	 * 
+	 * @param msg
+	 */
 	public void deleteMessage(Message msg) {
 		try {
 			String del = "delete from NACHRICHT where ID = " + msg.getId() + ";";
@@ -187,11 +216,17 @@ public class Driver {
 		this.addMessage(newMsg);
 	}
 
-	public ArrayList<Message> loadMsg(int time) {
+	/**
+	 * Ladet alle Nachrichten von einem Bestimmen TimeStamp aus
+	 * 
+	 * @param time
+	 * @return
+	 */
+	public ArrayList<Message> loadMessages(int time) {
 		ArrayList<Message> msgs = new ArrayList<Message>();
 
 		try {
-			String query = "Select * from Nachrichten where LASTCHANGE >" + time +";";
+			String query = "Select * from Nachrichten where LASTCHANGE >" + time + ";";
 			PreparedStatement output = conn.prepareStatement(query);
 			ResultSet rs = output.executeQuery();
 			do {

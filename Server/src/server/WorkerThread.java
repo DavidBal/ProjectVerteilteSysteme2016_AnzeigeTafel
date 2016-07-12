@@ -97,12 +97,12 @@ public class WorkerThread extends Thread {
 		case LOGIN:
 			try {
 				// User Name
-				boolean uN = this.in.readLine().equals("test");
+				String uN = this.in.readLine();
 				// PW
-				boolean pW = this.in.readLine().equals("test");
+				String pW = this.in.readLine();
 
 				//
-				if (uN && pW) {
+				if (this.manager.database.getUserBerechtigung(uN, pW) != 0) {
 					this.out.println("Yes");
 				} else {
 					this.out.println("NO");
