@@ -83,7 +83,7 @@ public class Database {
 				// TODO Exception
 			}
 
-			String sql = "INSERT INTO LOGIN (ID,USERNAME,PASSWORD,BERECHTIGUNG)" + "VALUES(" + id + ", '" + username
+			String sql = "INSERT INTO LOGIN (ID,USERNAME,PASSWORD,BERECHTIGUNG)" + "VALUES(null, '" + username
 					+ "' , '" + pw + "' , " + berechtigung + " );";
 
 			stmt.executeUpdate(sql);
