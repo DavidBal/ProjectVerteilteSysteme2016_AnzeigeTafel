@@ -1,8 +1,10 @@
 package server;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 public class Server extends Thread {
 
@@ -12,7 +14,7 @@ public class Server extends Thread {
 	int SERVER_PORT;
 
 	/**
-	 * Zählt die Aufrufe des Workers
+	 * Zï¿½hlt die Aufrufe des Workers
 	 */
 	int zaehler;
 
@@ -25,16 +27,18 @@ public class Server extends Thread {
 	 * Main Server Socket
 	 */
 	ServerSocket socket;
+	ServerManager manager;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param SERVER_PORT
 	 */
-	public Server(int SERVER_PORT) {
+	public Server(int SERVER_PORT, ServerManager manager) {
 		this.SERVER_PORT = SERVER_PORT;
 		this.zaehler = 0;
 		this.setName("Server_MainThread");
+		this.manager = manager;
 	}
 
 	/**
@@ -44,19 +48,28 @@ public class Server extends Thread {
 	@Override
 	public void run() {
 
-		ServerManager manager = new ServerManager();
+		try {
+			System.out.println("Server has been startet at IP: " + InetAddress.getLocalHost().getHostAddress()
+					+ " ; Port: " + this.SERVER_PORT);
+		} catch (UnknownHostException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		try {
 			socket = new ServerSocket(this.SERVER_PORT);
 
 			while (true) {
-				System.out.println("Waiting for Connection!!  -  " + zaehler);
+				if (ServerManager.debug)
+					System.out.println("Waiting for Connection!!  -  " + zaehler);
 				Socket client = socket.accept();
 				zaehler++;
 
-				System.out.println("Connection get Create Thread!");
+				if (ServerManager.debug)
+					System.out.println("Connection get Create Thread!");
 				Thread t = new WorkerThread(client, zaehler, manager);
 				t.start();
+				manager.onConnect();
 			}
 
 		} catch (IOException e) {

@@ -9,7 +9,7 @@ import java.net.Socket;
 import ControllCalls.ControllCalls;
 
 /**
- * Jede Anfrage eines Clients �ffnet eine neue Thread ...
+ * Jede Anfrage eines Clients �ffnet eine neue Thread ...
  * 
  * @author David
  *
@@ -28,9 +28,13 @@ public class WorkerThread extends Thread {
 
 		try {
 
-			System.out.println("Worker- " + this.id + ": I‘m UP!!");
+			if (ServerManager.debug)
+				System.out.println("Worker- " + this.id + ": I‘m UP!!");
+
 			String controllCall = this.in.readLine(); // Lese Befehl
-			// System.out.println(controllCall);
+
+			if (ServerManager.debug)
+				System.out.println(controllCall);
 
 			this.controll(controllCall);
 
@@ -41,7 +45,10 @@ public class WorkerThread extends Thread {
 			e.printStackTrace();
 		}
 
-		System.out.println("Worker - " + this.id + " END!!");
+		manager.onFinish();
+
+		if (ServerManager.debug)
+			System.out.println("Worker - " + this.id + " END!!");
 	}
 
 	WorkerThread(Socket client, int id, ServerManager manager) {
@@ -71,13 +78,13 @@ public class WorkerThread extends Thread {
 
 		switch (ControllCalls.stringToControllCall(controllCall)) {
 		case Ping:
-			// System.out.println("Worker: Right Case");
 			this.out.println("Pong");
 			break;
 		case NEW:
 			try {
 				String msg = this.in.readLine();
-				System.out.println(msg);
+				if (ServerManager.debug)
+					System.out.println(msg);
 				this.manager.messages.add(msg);
 				this.in.readLine();
 				// TODO END ??

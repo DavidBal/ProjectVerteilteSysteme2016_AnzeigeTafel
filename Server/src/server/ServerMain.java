@@ -22,9 +22,13 @@ public class ServerMain {
 			SERVER_PORT = Integer.valueOf(args[0]);
 		}
 
-		Thread serverMain = new Server(SERVER_PORT);
+		ServerManager manager = new ServerManager();
+		Thread serverMain = new Server(SERVER_PORT, manager);
 		serverMain.start();
-		
+
+		CommandsExcuter cE = new CommandsExcuter(manager);
+		cE.waitForCommand();
+
 		try {
 			serverMain.join();
 		} catch (InterruptedException e) {
