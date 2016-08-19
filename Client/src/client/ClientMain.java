@@ -21,11 +21,10 @@ public class ClientMain {
 		try {
 			
 			Manager manager = new Manager();
-			
 			ServerConector test = new ServerConector("localhost", SERVER_PORT);
 
 			manager.server = test;
-			// TODO Thread der das Auto-Uppdate der Daten übernimmt!
+			// TODO Thread der das Auto-Uppdate der Daten uebernimmt!
 
 			manager.server.ping();
 			// test.isReachable();
