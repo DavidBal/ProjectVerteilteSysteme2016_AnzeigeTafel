@@ -8,6 +8,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import config.ManagerClient;
+
 public class ServerConector {
 
 	private String name = "";
@@ -19,9 +21,6 @@ public class ServerConector {
 	private BufferedReader in;
 	private PrintWriter out;
 
-	private boolean connected;
-	private boolean reachable;
-
 	/**
 	 * 
 	 * @param serverIP
@@ -32,8 +31,6 @@ public class ServerConector {
 
 		this.serverIP = InetAddress.getByName(serverIP);
 		this.serverPort = serverPort;
-		this.connected = false;
-		this.reachable = false;
 
 	}
 
@@ -47,10 +44,7 @@ public class ServerConector {
 	public ServerConector(String serverIP, int serverPort, String name) throws UnknownHostException {
 		this.serverIP = InetAddress.getByName(serverIP);
 		this.serverPort = serverPort;
-		this.connected = false;
-		this.reachable = false;
 		this.name = name;
-
 	}
 
 	/**
@@ -61,15 +55,12 @@ public class ServerConector {
 	public void connect() {
 		try {
 			this.socket = new Socket(this.serverIP, serverPort);
-			this.connected = true;
-			this.reachable = true;
 			this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			this.out = new PrintWriter(socket.getOutputStream(), true);
 
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			this.reachable = false;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -80,30 +71,12 @@ public class ServerConector {
 	 * 
 	 */
 	public void disconnect() {
-		if (this.connected) {
-			try {
-				this.socket.close();
-				this.connected = false;
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		try {
+			this.socket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public boolean isConnected() {
-		return this.connected;
-	}
-
-	public boolean isReachable() {
-		if (this.connected == false) {
-			this.ping();
-		}
-		return this.reachable;
 	}
 
 	/**
@@ -114,11 +87,7 @@ public class ServerConector {
 	 * 
 	 */
 	public boolean ping() {
-		boolean ping = false;
-		if (!this.connected) {
-			this.connect();
-			ping = true;
-		}
+		this.connect();
 		this.out.println("Ping");
 
 		String tmp = "";
@@ -130,22 +99,22 @@ public class ServerConector {
 
 		System.out.println("Ping  :  " + tmp);
 
-		if (ping) {
-			this.disconnect();
-		}
+		this.disconnect();
 
 		if (tmp.equals("Pong")) {
 			return true;
 		}
-
-		this.disconnect();
 		return false;
 	}
 
+	/**
+	 * Sendet eine Nachricht an den Server.
+	 * @param msg
+	 */
 	public void sendNewMessage(String msg) {
 		this.connect();
 
-		this.out.println(ControllCalls.ControllCalls.NEW.toString());
+		this.out.println(ControllCalls.ControllCalls.NEW);
 		//
 		this.out.println(msg);
 		//
@@ -154,7 +123,34 @@ public class ServerConector {
 		this.disconnect();
 	}
 
-	// TODO
+	/**
+	 * Sendet eine Update auffoderung an den Server.
+	 * @param manager
+	 */
+	public void update(ManagerClient manager) {
+		this.connect();
+
+		manager.msg.clear(); //TODO Besser
+		
+		this.out.println(ControllCalls.ControllCalls.UPDATE);
+
+		String msg = "";
+		
+		try {
+			msg = in.readLine();
+
+			while (! msg.equals(ControllCalls.ControllCalls.END.toString())) {
+				manager.msg.add(msg);
+				msg = in.readLine();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.disconnect();
+	}
+
+	// TODO Make this Function usefull
 	/**
 	 * 
 	 */
@@ -172,7 +168,6 @@ public class ServerConector {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 		this.disconnect();
 	}
 
@@ -181,23 +176,20 @@ public class ServerConector {
 		String tmp = this.name + ":" + this.serverIP.getHostName() + ":" + this.serverPort;
 		return tmp;
 	}
-	
+
 	@Override
-	public boolean equals(Object o){
-		if(o instanceof ServerConector) {
+	public boolean equals(Object o) {
+		if (o instanceof ServerConector) {
 			ServerConector other = (ServerConector) o;
-			
-			if(this.name.equals(other.name)){
-				if(this.serverIP.equals(other.serverIP)){
-					if(this.serverPort == other.serverPort){
+			if (this.name.equals(other.name)) {
+				if (this.serverIP.equals(other.serverIP)) {
+					if (this.serverPort == other.serverPort) {
 						return true;
 					}
 				}
 			}
 		}
-		
 		return false;
-		
 	}
 
 }
